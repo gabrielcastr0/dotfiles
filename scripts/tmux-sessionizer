@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Tmux sessionizer - quickly create or switch to tmux sessions from project directories
+
+# Directories to search for projects
+SEARCH_DIRS=(
+    "$HOME/Documents/Projects"
+    "$HOME/Desktop"
+    "$HOME/dev"
+    "$HOME/work"
+)
+
+# Add any directory from SEARCH_DIRS that exists
+search_paths=""
+for dir in "${SEARCH_DIRS[@]}"; do
+    if [ -d "$dir" ]; then
+        search_paths="$search_paths$dir "
+    fi
+done
+
+# If no search paths exist, use home directory
+if [ -z "$search_paths" ]; then
+    search_paths="$HOME"
+fi
+
+# If argument provided, use it directly
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    # Use fd to find directories, excluding common ignore patterns
+    selected=$(fd . $search_paths \
+        --type d \
+        --max-depth 3 \
+        --exclude node_modules \
+        --exclude .git \
+        --exclude venv \
+        --exclude .venv \
+        --exclude __pycache__ \
+        --exclude dist \
+        --exclude build \
+        2>/dev/null | fzf --height 40% --reverse --border \
+        --preview 'ls -la {} 2>/dev/null | head -50' \
+        --preview-window=right:50%:wrap)
+fi
+
+# Exit if nothing selected
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+# Get the session name from the selected directory
+selected_name=$(basename "$selected" | tr . _)
+
+# Check if we're in tmux
+tmux_running=$(pgrep tmux)
+
+# If not in tmux and tmux is not running, start new session
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s "$selected_name" -c "$selected"
+    exit 0
+fi
+
+# If session doesn't exist, create it
+if ! tmux has-session -t="$selected_name" 2> /dev/null; then
+    tmux new-session -ds "$selected_name" -c "$selected"
+fi
+
+# Switch to the session
+if [[ -z $TMUX ]]; then
+    tmux attach-session -t "$selected_name"
+else
+    tmux switch-client -t "$selected_name"
+fi

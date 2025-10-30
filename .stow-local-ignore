@@ -1,0 +1,19 @@
+# Stow ignore file - files and directories that should not be stowed
+
+# Documentation
+README.md
+LICENSE
+.gitignore
+
+# Git
+.git
+.gitignore
+.gitmodules
+
+# Editor files
+.DS_Store
+*.swp
+*.swo
+*~
+.idea
+.vscode

@@ -1,0 +1,5 @@
+# Tmux plugins (managed by TPM)
+tmux/.config/tmux/.tmux/plugins/
+
+# Tmux resurrect/continuum data
+tmux/.config/tmux/resurrect/
