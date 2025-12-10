@@ -56,16 +56,16 @@ cd ~/dotfiles
 2. Use GNU Stow to create symlinks:
 ```bash
 # Install all configurations
-stow */
+stow -t ~ */
 
 # Or install specific configurations
-stow nvim
-stow tmux
-stow zsh
-stow starship
-stow wezterm
-stow zed
-stow scripts
+stow -t ~ nvim
+stow -t ~ tmux
+stow -t ~ zsh
+stow -t ~ starship
+stow -t ~ wezterm
+stow -t ~ zed
+stow -t ~ scripts
 ```
 
 ## What's Included
@@ -331,7 +331,7 @@ The scripts are included in this repository. Stow them to make them available sy
 
 ```bash
 cd ~/dotfiles
-stow scripts
+stow -t ~ scripts
 ```
 
 This will create symlinks in `~/scripts/` for all custom scripts.
@@ -511,7 +511,7 @@ If you don't have GNU coreutils installed, comment out line 11:
 Ensure scripts are stowed and executable:
 ```bash
 cd ~/dotfiles
-stow scripts
+stow -t ~ scripts
 ls -la ~/scripts/  # Verify symlinks exist
 chmod +x ~/scripts/*  # Ensure they're executable
 ```

@@ -168,3 +168,6 @@ fi
 if [ -f ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh ]; then
     source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
 fi
+
+# Set GPG TTY for proper graphical passphrase prompts
+export GPG_TTY=$(tty)
