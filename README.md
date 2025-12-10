@@ -124,7 +124,9 @@ curl -sS https://starship.rs/install.sh | sh
 
 **Fedora:**
 ```bash
-sudo dnf install zsh tmux neovim starship
+sudo dnf install zsh tmux neovim
+# Starship (not in Fedora repos - use official installer)
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 #### Oh-My-Zsh
@@ -152,14 +154,14 @@ sudo dnf install wezterm-latest.fedora.rpm
 
 **Arch Linux:**
 ```bash
-sudo pacman -S zoxide fzf fd ripgrep bat eza tree lazygit yazi
+sudo pacman -S zoxide fzf fd ripgrep bat eza tree lazygit yazi lsd
 yay -S atuin  # or use official installer
 ```
 
 **Ubuntu/Debian:**
 ```bash
 # Core tools
-sudo apt install fzf fd-find ripgrep bat tree
+sudo apt install fzf fd-find ripgrep bat tree lsd
 
 # Modern alternatives (may need to install from releases)
 # zoxide
@@ -190,12 +192,15 @@ curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
 **Fedora:**
 ```bash
-sudo dnf install zoxide fzf fd-find ripgrep bat eza tree
+sudo dnf install zoxide fzf fd-find ripgrep bat eza tree lsd
 sudo dnf copr enable atim/lazygit -y
 sudo dnf install lazygit
 # Install atuin from official installer
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-# Install yazi from cargo or releases
+# Install yazi (from copr or cargo)
+sudo dnf copr enable varlad/yazi -y
+sudo dnf install yazi
+# Or via cargo: cargo install --locked yazi-fm yazi-cli
 ```
 
 **Note for Ubuntu/Debian users:**
@@ -273,20 +278,19 @@ sudo apt install xclip
 sudo dnf install xclip
 ```
 
-### Zsh Plugins
+### Zsh Plugins (for Oh-My-Zsh)
+
+These plugins must be installed to the Oh-My-Zsh custom plugins directory:
 
 ```bash
-# Arch Linux
-sudo pacman -S zsh-syntax-highlighting zsh-autosuggestions
+# zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
-# Ubuntu/Debian
-sudo apt install zsh-syntax-highlighting zsh-autosuggestions
-
-# Fedora
-sudo dnf install zsh-syntax-highlighting zsh-autosuggestions
+# zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 ```
 
-Then source them in your `.zshrc` (already configured in this repo).
+> **Note:** Do NOT use system package managers (`pacman`, `apt`, `dnf`) for these plugins. System packages install to `/usr/share/` which Oh-My-Zsh doesn't check. The plugins must be cloned directly into `~/.oh-my-zsh/custom/plugins/`.
 
 ### Tmux Plugin Manager (TPM)
 
