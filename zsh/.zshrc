@@ -9,6 +9,23 @@ if command -v dircolors &> /dev/null; then
     eval "$(dircolors)"
 fi
 
+# zsh plugins (must be defined BEFORE sourcing oh-my-zsh)
+plugins=(
+    git
+    web-search
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+
+# Plugin Configuration
+# zsh-autosuggestions configuration
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+
+# zsh-syntax-highlighting configuration
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+
 source $ZSH/oh-my-zsh.sh
 
 # unbind ctrl g in terminal
@@ -32,11 +49,6 @@ eval "$(fzf --zsh)"
 # Keymaps for this is available at https://github.com/junegunn/fzf-git.sh
 source ~/scripts/fzf-git.sh
 
-# Atuin Configs
-export ATUIN_NOBIND="true"
-eval "$(atuin init zsh)"
-# bindkey '^r' _atuin_search_widget
-bindkey '^r' atuin-up-search-viins
 #User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -72,12 +84,6 @@ bindkey -M viins '^P' up-line-or-history
 bindkey -M viins '^N' down-line-or-history
 #----------------------------------------
 
-# zsh plugins
-plugins=(
-    git
-    web-search
-)
-
 # -------------------ALIAS----------------------
 # These alias need to have the same exact space as written here
 # HACK: For Running Go Server using Air
@@ -87,9 +93,6 @@ alias air='$(go env GOPATH)/bin/air'
 alias c="clear"
 alias e="exit"
 alias vim="nvim"
-
-# Fix for Ghostty on KDE Wayland - force X11 backend
-alias ghostty='GDK_BACKEND=x11 ghostty'
 
 # Tmux 
 alias tmux="tmux -f $TMUX_CONF"
@@ -106,9 +109,9 @@ alias fman="compgen -c | fzf | xargs man"
 # zoxide (called from ~/scripts/)
 alias nzo="~/scripts/zoxide_openfiles_nvim.sh"
 
-# Next level of an ls 
-# options :  --no-filesize --no-time --no-permissions 
-alias ls="eza --no-filesize --long --color=always --icons=always --no-user" 
+# Next level of an ls
+# options :  --no-filesize --no-time --no-permissions
+alias ls="lsd --long --color=always --icon=always" 
 
 # tree
 alias tree="tree -L 3 -a -I '.git' --charset X "
@@ -130,6 +133,9 @@ alias nvim-scratch="NVIM_APPNAME=nvim-scratch nvim"
 # lazygit
 alias lg="lazygit"
 
+# lazydocker
+alias lzd="lazydocker"
+
 # mpd start alias
 alias mpds="mpd ~/.config/mpd/mpd.conf"
 
@@ -137,14 +143,28 @@ alias mpds="mpd ~/.config/mpd/mpd.conf"
 # alias castrovault="cd ~/Documents/Obsidian/castroVault/"
 # ---------------------------------------
 
-# Zsh plugins - Linux system paths
-if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-elif [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
+# Zsh plugins - Linux system paths (now handled by Oh My Zsh plugins)
+# if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+#     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# elif [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+#     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# fi
 
 # Deno environment
 if [ -f "$HOME/.deno/env" ]; then
     . "$HOME/.deno/env"
+fi
+
+# Rust environment
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi
+
+# Manually source zsh plugins (fallback if Oh My Zsh doesn't load them)
+if [ -f ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh ]; then
+    source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+fi
+
+if [ -f ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh ]; then
+    source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
 fi

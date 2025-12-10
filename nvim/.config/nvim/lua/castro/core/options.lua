@@ -43,6 +43,6 @@ vim.opt.splitbelow = true
 -- misc
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = ""  -- Disabled the 80 column line
 vim.opt.clipboard:append("unnamedplus")
 vim.opt.mouse = "a"
