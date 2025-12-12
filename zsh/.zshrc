@@ -94,8 +94,21 @@ alias c="clear"
 alias e="exit"
 alias vim="nvim"
 
-# Tmux 
-alias tmux="tmux -f $TMUX_CONF"
+# Tmux
+# Attach to most recent session or create new one
+tmux() {
+  if [[ $# -eq 0 ]]; then
+    local last_session
+    last_session=$(command tmux list-sessions -F '#{session_last_attached} #{session_name}' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2)
+    if [[ -n "$last_session" ]]; then
+      command tmux -f "$TMUX_CONF" attach -t "$last_session"
+    else
+      command tmux -f "$TMUX_CONF" new
+    fi
+  else
+    command tmux -f "$TMUX_CONF" "$@"
+  fi
+}
 alias a="attach"
 # calls the tmux new session script
 alias tns="~/scripts/tmux-sessionizer"
