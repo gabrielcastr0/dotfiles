@@ -49,7 +49,7 @@
 		"dock": "left"
 	},
 	// Themes
-	"theme": "Github Dark",
+	"theme": "Catppuccin Macchiato (Blur)",
 	// LSP Config
 	"lsp": {
 		"tailwindcss-language-server": {
