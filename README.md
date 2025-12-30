@@ -43,7 +43,7 @@ Install dependencies **before** running stow. Choose your distro below.
 sudo pacman -S zsh tmux neovim starship git stow
 
 # Shell enhancements
-sudo pacman -S zoxide fzf fd ripgrep bat eza tree lazygit yazi lsd xclip
+sudo pacman -S zoxide fzf fd ripgrep bat eza tree lazygit yazi xclip
 
 # Build tools & development
 sudo pacman -S base-devel go stylua
@@ -65,7 +65,7 @@ sudo dnf install zsh tmux neovim git stow
 curl -sS https://starship.rs/install.sh | sh
 
 # Shell enhancements
-sudo dnf install zoxide fzf fd-find ripgrep bat eza tree lsd xclip golang
+sudo dnf install zoxide fzf fd-find ripgrep bat eza tree xclip golang
 
 # Lazygit
 sudo dnf copr enable atim/lazygit -y
@@ -100,7 +100,7 @@ sudo apt install zsh tmux neovim git stow
 curl -sS https://starship.rs/install.sh | sh
 
 # Shell enhancements
-sudo apt install fzf fd-find ripgrep bat tree lsd xclip golang
+sudo apt install fzf fd-find ripgrep bat eza tree xclip golang
 
 # Zoxide
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
