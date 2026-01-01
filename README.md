@@ -29,6 +29,8 @@ stow -t ~ */
 | **Zsh** | Oh-My-Zsh, Starship prompt, vi mode, shell enhancements |
 | **Starship** | Custom prompt configuration |
 | **Wezterm** | Terminal emulator config |
+| **Kitty** | Terminal emulator config |
+| **Ghostty** | Terminal emulator config (Rosé Pine theme, tmux-like keybinds) |
 | **Zed** | Code editor settings |
 | **Scripts** | Custom utilities (fzf-git, tmux-sessionizer, etc.) |
 
@@ -64,8 +66,16 @@ sudo dnf install zsh tmux neovim git stow
 # Starship (not in Fedora repos)
 curl -sS https://starship.rs/install.sh | sh
 
+# Eza (retired from official repos in Fedora 42+, use COPR)
+sudo dnf copr enable alternateved/eza -y
+sudo dnf install eza
+
 # Shell enhancements
-sudo dnf install zoxide fzf fd-find ripgrep bat eza tree xclip golang
+sudo dnf install zoxide fzf fd-find ripgrep bat tree golang
+
+# Clipboard tools
+sudo dnf install wl-clipboard  # For Wayland (GNOME 49+ default)
+# sudo dnf install xclip       # For X11 sessions only
 
 # Lazygit
 sudo dnf copr enable atim/lazygit -y
@@ -195,7 +205,7 @@ cd ~/dotfiles
 stow -t ~ */
 
 # Or stow individually
-stow -t ~ nvim tmux zsh starship wezterm zed scripts
+stow -t ~ nvim tmux zsh starship wezterm kitty ghostty zed scripts
 ```
 
 ### Post-Stow Setup
@@ -251,6 +261,8 @@ After stowing, configs are symlinked to:
 | Tmux | `~/.config/tmux/` |
 | Starship | `~/.config/starship/` |
 | Wezterm | `~/.config/wezterm/` |
+| Kitty | `~/.config/kitty/` |
+| Ghostty | `~/.config/ghostty/` |
 | Zed | `~/.config/zed/` |
 | Zsh | `~/.zshrc`, `~/.zprofile` |
 | Scripts | `~/scripts/` |
