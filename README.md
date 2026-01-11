@@ -28,7 +28,6 @@ stow -t ~ */
 | **Tmux** | TPM, Catppuccin theme, session management, vim-tmux navigation |
 | **Zsh** | Oh-My-Zsh, Starship prompt, vi mode, shell enhancements |
 | **Starship** | Custom prompt configuration |
-| **Wezterm** | Terminal emulator config |
 | **Kitty** | Terminal emulator config |
 | **Ghostty** | Terminal emulator config (Rosé Pine theme, tmux-like keybinds) |
 | **Zed** | Code editor settings |
@@ -54,7 +53,7 @@ sudo pacman -S base-devel go stylua
 sudo pacman -S ttf-jetbrains-mono-nerd
 
 # AUR packages
-yay -S atuin wezterm
+yay -S atuin
 ```
 
 ### Fedora
@@ -94,10 +93,6 @@ sudo dnf groupinstall "Development Tools"
 # Fonts
 sudo dnf install jetbrains-mono-fonts-all
 # For Nerd Font icons, download from https://www.nerdfonts.com/font-downloads
-
-# Wezterm
-curl -LO https://github.com/wez/wezterm/releases/download/latest/wezterm-latest.fedora.rpm
-sudo dnf install wezterm-latest.fedora.rpm
 ```
 
 ### Ubuntu/Debian
@@ -142,10 +137,6 @@ mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts
 curl -fLo "JetBrainsMono Nerd Font.ttf" \
   https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf
 fc-cache -fv
-
-# Wezterm
-curl -LO https://github.com/wez/wezterm/releases/download/latest/wezterm-latest.Ubuntu22.04.deb
-sudo dpkg -i wezterm-latest.Ubuntu22.04.deb
 ```
 
 > **Note for Ubuntu/Debian:** `fd-find` is installed as `fdfind` and `bat` as `batcat`. Create aliases:
@@ -205,7 +196,7 @@ cd ~/dotfiles
 stow -t ~ */
 
 # Or stow individually
-stow -t ~ nvim tmux zsh starship wezterm kitty ghostty zed scripts
+stow -t ~ nvim tmux zsh starship kitty ghostty zed scripts
 ```
 
 ### Post-Stow Setup
@@ -260,7 +251,6 @@ After stowing, configs are symlinked to:
 | Neovim | `~/.config/nvim/` |
 | Tmux | `~/.config/tmux/` |
 | Starship | `~/.config/starship/` |
-| Wezterm | `~/.config/wezterm/` |
 | Kitty | `~/.config/kitty/` |
 | Ghostty | `~/.config/ghostty/` |
 | Zed | `~/.config/zed/` |
