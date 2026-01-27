@@ -1,0 +1,51 @@
+# Zsh Aliases
+
+# HACK: For Running Go Server using Air
+alias air='$(go env GOPATH)/bin/air'
+
+# General shortcuts
+alias c="clear"
+alias e="exit"
+alias vim="nvim"
+
+# Tmux
+alias a="attach"
+alias tns="~/scripts/tmux-sessionizer"
+
+# fzf
+alias nlof="~/scripts/fzf_listoldfiles.sh"
+alias fman="compgen -c | fzf | xargs man"
+
+# zoxide
+alias nzo="~/scripts/zoxide_openfiles_nvim.sh"
+
+# eza (ls replacement)
+# options: --no-filesize --no-time --no-permissions
+alias ls="eza --long --color=always --icons=always"
+
+# tree
+alias tree="tree -L 3 -a -I '.git' --charset X "
+alias dtree="tree -L 3 -a -d -I '.git' --charset X "
+
+# lstr
+alias lstr="lstr --icons"
+
+# git aliases
+alias gt="git"
+alias ga="git add ."
+alias gs="git status -s"
+alias gc='git commit -m'
+alias glog='git log --oneline --graph --all'
+alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
+
+# neovim scratch
+alias nvim-scratch="NVIM_APPNAME=nvim-scratch nvim"
+
+# lazygit
+alias lg="lazygit"
+
+# lazydocker
+alias lzd="lazydocker"
+
+# mpd start alias
+alias mpds="mpd ~/.config/mpd/mpd.conf"

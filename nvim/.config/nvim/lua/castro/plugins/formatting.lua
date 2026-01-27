@@ -54,13 +54,13 @@ return {
 				"--stdin-filepath",
 				"$FILENAME",
 				"--tab-width",
-				"4",
+				"2",
 				"--use-tabs",
 				"false",
 			},
 		}
 		conform.formatters.shfmt = {
-			prepend_args = { "-i", "4" },
+			prepend_args = { "-i", "2" },
 		}
 
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()

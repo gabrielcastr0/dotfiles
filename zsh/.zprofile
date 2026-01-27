@@ -3,6 +3,10 @@ export NVM_DIR="$HOME/.nvm"
 
 export LANG=en_US.UTF-8
 
+# Default editors
+export EDITOR=nvim
+export VISUAL=nvim
+
 #------------All PATHS------------
 
 # Add local bin directories to PATH

@@ -28,6 +28,9 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 
 source $ZSH/oh-my-zsh.sh
 
+# load aliases (after oh-my-zsh to prevent overrides)
+[[ -f ~/.zaliases ]] && source ~/.zaliases
+
 # unbind ctrl g in terminal
 bindkey -r "^G"
 
@@ -55,9 +58,6 @@ source ~/scripts/fzf-git.sh
 #----- Vim Editing modes & keymaps ------
 # set -o vi  # Commented out - already using bindkey -v above
 
-export EDITOR=nvim
-export VISUAL=nvim
-
 # Fix special characters in Vi insert mode
 bindkey -M viins '~' self-insert
 bindkey -M viins '`' self-insert
@@ -84,17 +84,7 @@ bindkey -M viins '^P' up-line-or-history
 bindkey -M viins '^N' down-line-or-history
 #----------------------------------------
 
-# -------------------ALIAS----------------------
-# These alias need to have the same exact space as written here
-# HACK: For Running Go Server using Air
-alias air='$(go env GOPATH)/bin/air'
-
-# other Aliases shortcuts
-alias c="clear"
-alias e="exit"
-alias vim="nvim"
-
-# Tmux
+# Tmux function wrapper
 # Attach to most recent session or create new one
 tmux() {
   if [[ $# -eq 0 ]]; then
@@ -109,52 +99,6 @@ tmux() {
     command tmux -f "$TMUX_CONF" "$@"
   fi
 }
-alias a="attach"
-# calls the tmux new session script
-alias tns="~/scripts/tmux-sessionizer"
-
-# fzf 
-# called from ~/scripts/
-alias nlof="~/scripts/fzf_listoldfiles.sh"
-# opens documentation through fzf (eg: git,zsh etc.)
-alias fman="compgen -c | fzf | xargs man"
-
-# zoxide (called from ~/scripts/)
-alias nzo="~/scripts/zoxide_openfiles_nvim.sh"
-
-# Next level of an ls
-# options :  --no-filesize --no-time --no-permissions
-alias ls="eza --long --color=always --icons=always" 
-
-# tree
-alias tree="tree -L 3 -a -I '.git' --charset X "
-alias dtree="tree -L 3 -a -d -I '.git' --charset X "
-
-# lstr
-alias lstr="lstr --icons"
-
-# git aliases
-alias gt="git"
-alias ga="git add ."
-alias gs="git status -s"
-alias gc='git commit -m'
-alias glog='git log --oneline --graph --all'
-alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
-
-alias nvim-scratch="NVIM_APPNAME=nvim-scratch nvim"
-
-# lazygit
-alias lg="lazygit"
-
-# lazydocker
-alias lzd="lazydocker"
-
-# mpd start alias
-alias mpds="mpd ~/.config/mpd/mpd.conf"
-
-# obsidian vault path (update this for your system)
-# alias castrovault="cd ~/Documents/Obsidian/castroVault/"
-# ---------------------------------------
 
 # Zsh plugins - Linux system paths (now handled by Oh My Zsh plugins)
 # if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
@@ -184,3 +128,11 @@ fi
 
 # Set GPG TTY for proper graphical passphrase prompts
 export GPG_TTY=$(tty)
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# opencode
+export PATH=/home/gc4str0/.opencode/bin:$PATH
+
+# bun completions
+[ -s "/home/gc4str0/.bun/_bun" ] && source "/home/gc4str0/.bun/_bun"

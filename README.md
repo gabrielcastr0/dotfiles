@@ -98,8 +98,21 @@ sudo dnf install jetbrains-mono-fonts-all
 ### Ubuntu/Debian
 
 ```bash
-# Core tools
-sudo apt install zsh tmux neovim git stow
+# Core tools (excluding Neovim - see below)
+sudo apt install zsh tmux git stow
+
+# Neovim 0.11+ (required for LSP config)
+# The apt version is too old, install via AppImage:
+curl -LO https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.appimage
+chmod u+x nvim-linux-x86_64.appimage
+mkdir -p ~/.local/bin
+mv nvim-linux-x86_64.appimage ~/.local/bin/nvim
+# Add to PATH (add this to ~/.zshrc or ~/.bashrc):
+# export PATH="$HOME/.local/bin:$PATH"
+
+# pipx (required for Mason to install Python tools like isort, pylint)
+sudo apt install pipx
+pipx ensurepath
 
 # Starship
 curl -sS https://starship.rs/install.sh | sh
@@ -214,7 +227,9 @@ stow -t ~ nvim tmux zsh starship kitty ghostty zed scripts
 3. **Start Tmux and install plugins:**
    ```bash
    tmux
-   # Press: Ctrl+b then I (capital i)
+   # Press: Ctrl+a then Shift+I (capital i)
+   # Or run directly:
+   ~/.config/tmux/.tmux/plugins/tpm/bin/install_plugins
    ```
 
 4. **Restart your terminal** to apply all changes.
@@ -229,6 +244,7 @@ Custom scripts are symlinked to `~/scripts/`:
 | `tmux-sessionizer` | `tns` | Quick tmux session switching |
 | `fzf_listoldfiles.sh` | `nlof` | Browse recent Neovim files |
 | `zoxide_openfiles_nvim.sh` | `nzo` | Open files from zoxide history |
+| `nvim-update` | - | Update Neovim AppImage to latest version |
 
 ### Customize tmux-sessionizer paths
 
@@ -294,6 +310,20 @@ nvim
 :Mason      " Check installations
 :LspInfo    " Check LSP status
 ```
+
+### Neovim: nvim-lspconfig deprecation warning
+```
+nvim-lspconfig support for Nvim 0.10 or older is deprecated
+```
+The LSP config uses Neovim 0.11+ APIs (`vim.lsp.config`, `vim.lsp.enable`). Install Neovim 0.11+ via AppImage - see [Ubuntu/Debian](#ubuntudebian) instructions.
+
+### Mason: Python tools fail to install (isort, pylint)
+On Debian/Ubuntu, pip cannot install packages globally (PEP 668). Install pipx:
+```bash
+sudo apt install pipx
+pipx ensurepath
+```
+Restart your terminal and reopen Neovim.
 
 ### Tmux: Plugins not loading
 ```bash
