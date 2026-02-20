@@ -74,7 +74,19 @@ return {
 			end,
 		},
 	},
-    -- Lazy git 
+    -- Diffview
+    {
+        "sindrets/diffview.nvim",
+        cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+        keys = {
+            { "<leader>dv", "<cmd>DiffviewOpen<cr>", desc = "Diffview open" },
+            { "<leader>dh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history" },
+            { "<leader>dH", "<cmd>DiffviewFileHistory<cr>", desc = "Branch history" },
+            { "<leader>dc", "<cmd>DiffviewClose<cr>", desc = "Diffview close" },
+        },
+        opts = {},
+    },
+    -- Lazy git
     {
         "kdheepak/lazygit.nvim",
         --NOTE: Trying out lazygit in Snacks nvim

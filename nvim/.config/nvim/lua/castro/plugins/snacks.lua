@@ -186,13 +186,7 @@ return {
 			},
 
 			-- Snacks Picker
-			{
-				"<leader>pf",
-				function()
-					require("snacks").picker.files()
-				end,
-				desc = "Find Files (Snacks Picker)",
-			},
+			-- { "<leader>pf", function() require("snacks").picker.files() end, desc = "Find Files (Snacks Picker)" },
 			{
 				"<leader>pc",
 				function()

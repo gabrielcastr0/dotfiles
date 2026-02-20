@@ -55,25 +55,97 @@ return {
             end,
         })
 
+        -- NOTE: Diagnostic Setup
         -- Define sign icons for each severity
         local signs = {
-            [vim.diagnostic.severity.ERROR] = " ",
-            [vim.diagnostic.severity.WARN] = " ",
+            [vim.diagnostic.severity.ERROR] = " ",
+            [vim.diagnostic.severity.WARN] = " ",
             [vim.diagnostic.severity.HINT] = "󰠠 ",
-            [vim.diagnostic.severity.INFO] = " ",
+            [vim.diagnostic.severity.INFO] = " ",
         }
 
-        -- Set diagnostic config
-        vim.diagnostic.config({
-            signs = {
-                text = signs,
-            },
-            virtual_text = true,
-            underline = true,
-            update_in_insert = false,
-        })
+        -- curosr hover hold
+        local augroup = vim.api.nvim_create_augroup("LspDiagnosticsHold", { clear = true })
+        local virtual_text_enabled = true
+        vim.o.updatetime = 350
 
-        -- Setup servers
+        -- helper functon check if cursor over diagnostic
+        local function cursor_over_diagnostic()
+            local bufnr = vim.api.nvim_get_current_buf()
+            local cursor_pos = vim.api.nvim_win_get_cursor(0)
+            local lnum = cursor_pos[1] - 1
+            local col = cursor_pos[2]
+            local diags = vim.diagnostic.get(bufnr, { lnum = lnum })
+            for _, diag in ipairs(diags) do
+                if diag.end_lnum == lnum and col >= diag.col and col < diag.end_col then
+                    return true
+                end
+            end
+            return false
+        end
+
+        -- helper check for any open float (to avoid overlaps with float doc)
+        local function has_floating_win()
+            for _, winid in ipairs(vim.api.nvim_list_wins()) do
+                local cfg = vim.api.nvim_win_get_config(winid)
+                if cfg.relative ~= '' then
+                    return true
+                end
+            end
+            return false
+        end
+
+        -- update diagnostic config function
+        local function update_diagnostic_config()
+            vim.diagnostic.config({
+                signs = { text = signs },
+                virtual_text = virtual_text_enabled,
+                underline = true,  -- Always on
+                update_in_insert = true,
+                float = {
+                    focusable = false,
+                    style = "minimal",
+                    border = "rounded",
+                    source = true,
+                },
+            })
+        end
+
+        -- call initial diagnostic setup
+        update_diagnostic_config()
+
+        -- LSP Toggle Keymaps
+        -- <leader>lx toggle for virtual text (no hover changes)
+        vim.keymap.set('n', '<leader>lx', function()
+            virtual_text_enabled = not virtual_text_enabled
+            update_diagnostic_config()
+        end, { desc = "Toggle LSP virtual text" })
+
+        -- <leader>ll toggle between virtual text mode and precise hover mode
+        vim.keymap.set('n', '<leader>ll', function()
+            virtual_text_enabled = not virtual_text_enabled
+            update_diagnostic_config()
+
+            -- Clear autocmds first
+            vim.api.nvim_clear_autocmds({ group = augroup })
+
+            -- Enable hover only when virtual text is off
+            if not virtual_text_enabled then
+                vim.api.nvim_create_autocmd("CursorHold", {
+                    group = augroup,
+                    callback = function()
+                        if cursor_over_diagnostic() and not has_floating_win() then
+                            vim.diagnostic.open_float(nil, {
+                                focusable = false,
+                                close_events = { "CursorMoved", "CursorMovedI", "BufHidden", "InsertCharPre", "WinLeave" },
+                            })
+                        end
+                    end,
+                })
+            end
+        end, { desc = "Toggle LSP diagnostics virtual text or precise hover" })
+
+        -- NOTE: Setup servers
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
         local capabilities = cmp_nvim_lsp.default_capabilities()
 
@@ -178,5 +250,39 @@ return {
             },
         })
         vim.lsp.enable("gopls")
+
+        -- css
+        vim.lsp.config("cssls", {
+          filetypes = { "css", "scss", "less" },
+          settings = {
+            css = { validate = true },
+            scss = { validate = true },
+            less = { validate = true },
+          },
+        })
+        vim.lsp.enable("cssls")
+
+        -- tailwind
+        vim.lsp.config("tailwindcss", {
+            filetypes = {
+                "html",
+                "css",
+                "javascript",
+                "typescript",
+                "javascriptreact",
+                "typescriptreact",
+                "svelte",
+                "vue",
+                "astro",
+            },
+            init_options = {
+                userLanguages = {
+                    astro = "html",
+                },
+            },
+        })
+        vim.lsp.enable("tailwindcss")
+
+        vim.lsp.enable("astro")
     end,
 }

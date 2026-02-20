@@ -4,7 +4,7 @@ background-opacity = 0.88
 background-blur-radius = 25
 
 font-family = JetBrainsMonoNL Nerd Font
-font-size = 16
+font-size = 15
 cursor-style = block
 cursor-style-blink = false
 cursor-color = cell-foreground

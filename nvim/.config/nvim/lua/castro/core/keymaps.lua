@@ -3,6 +3,10 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+vim.keymap.set("n", "<leader><leader>", function()
+    vim.cmd("so")
+end)
+
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines down in visual selection" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "moves lines up in visual selection" })
 
@@ -81,13 +85,5 @@ vim.keymap.set("n", "<leader>fp", function()
   print("File path copied to clipboard: " .. filePath) -- Optional: print message to confirm
 end, { desc = "Copy file path to clipboard" })
 
--- Toggle LSP diagnostics visibility
-local isLspDiagnosticsVisible = true
-vim.keymap.set("n", "<leader>lx", function()
-    isLspDiagnosticsVisible = not isLspDiagnosticsVisible
-    vim.diagnostic.config({
-        virtual_text = isLspDiagnosticsVisible,
-        underline = isLspDiagnosticsVisible
-    })
-end, { desc = "Toggle LSP diagnostics" })
+-- NOTE: LSP diagnostic toggles (<leader>lx, <leader>ll) are in lsp/lspconfig.lua
 

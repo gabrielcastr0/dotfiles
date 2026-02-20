@@ -1,6 +1,21 @@
 {
+  "ssh_connections": [
+    {
+      "host": "192.168.1.6",
+      "username": "gc4str0",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/gc4str0"
+          ]
+        }
+      ],
+      "nickname": "Acer Nitro 5"
+    }
+  ],
   "icon_theme": "Material Icon Theme",
-  "theme": "Catppuccin Mocha",
+  "theme": "GitHub Dark",
   "vim_mode": true,
   "ui_font_size": 18,
   "buffer_font_size": 20,

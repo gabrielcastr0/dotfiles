@@ -5,6 +5,7 @@ return {
     dependencies = {
         "hrsh7th/cmp-buffer", -- source for text in buffer
         "hrsh7th/cmp-path", -- source for file system paths
+        "hrsh7th/cmp-cmdline",
         "f3fora/cmp-spell",
         {
             "L3MON4D3/LuaSnip",
@@ -202,6 +203,21 @@ return {
 
         -- loads vscode style snippets from installed plugins (e.g. friendly-snippets)
         require("luasnip.loaders.from_vscode").lazy_load()
+
+        cmp.setup.cmdline(":", {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = cmp.config.sources({
+                { name = "path" },
+                { name = "cmdline" },
+                {
+                    name = 'buffer' ,
+                    option = {
+                        max_item_count = 30,
+                        keyword_length = 3,
+                    },
+                },
+            }),
+        })
 
         cmp.setup({
             experimental = {

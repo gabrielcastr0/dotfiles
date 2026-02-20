@@ -131,8 +131,6 @@ export GPG_TTY=$(tty)
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# opencode
-export PATH=/home/gc4str0/.opencode/bin:$PATH
 
 # bun completions
 [ -s "/home/gc4str0/.bun/_bun" ] && source "/home/gc4str0/.bun/_bun"
