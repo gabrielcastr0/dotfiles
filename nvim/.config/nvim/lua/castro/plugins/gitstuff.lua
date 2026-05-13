@@ -74,15 +74,14 @@ return {
 			end,
 		},
 	},
-    -- Diffview
+    -- CodeDiff
     {
-        "sindrets/diffview.nvim",
-        cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+        "esmuellert/codediff.nvim",
+        cmd = "CodeDiff",
         keys = {
-            { "<leader>dv", "<cmd>DiffviewOpen<cr>", desc = "Diffview open" },
-            { "<leader>dh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history" },
-            { "<leader>dH", "<cmd>DiffviewFileHistory<cr>", desc = "Branch history" },
-            { "<leader>dc", "<cmd>DiffviewClose<cr>", desc = "Diffview close" },
+            { "<leader>dv", "<cmd>CodeDiff<cr>", desc = "CodeDiff open" },
+            { "<leader>df", "<cmd>CodeDiff file HEAD<cr>", desc = "CodeDiff current file vs HEAD" },
+            { "<leader>dH", "<cmd>CodeDiff history<cr>", desc = "CodeDiff branch history" },
         },
         opts = {},
     },

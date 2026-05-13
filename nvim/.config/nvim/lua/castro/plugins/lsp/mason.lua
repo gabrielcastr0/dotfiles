@@ -46,6 +46,7 @@ return {
                 "emmet_language_server",
                 -- "eslint",
                 "marksman",
+                "prismals",
             },
         })
 

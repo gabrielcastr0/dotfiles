@@ -134,3 +134,18 @@ export GPG_TTY=$(tty)
 
 # bun completions
 [ -s "/home/gc4str0/.bun/_bun" ] && source "/home/gc4str0/.bun/_bun"
+
+export QT_STYLE_OVERRIDE=kvantum
+
+alias claude-mem='bun "/home/gc4str0/.claude/plugins/cache/thedotmack/claude-mem/12.1.0/scripts/worker-service.cjs"'
+
+# opencode
+export PATH=/home/gc4str0/.opencode/bin:$PATH
+
+# pnpm
+export PNPM_HOME="/home/gc4str0/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end

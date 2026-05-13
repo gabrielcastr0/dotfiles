@@ -44,7 +44,7 @@ Install dependencies **before** running stow. Choose your distro below.
 sudo pacman -S zsh tmux neovim starship git stow
 
 # Shell enhancements
-sudo pacman -S zoxide fzf fd ripgrep bat eza tree lazygit yazi xclip
+sudo pacman -S zoxide fzf fd ripgrep bat eza tree lazygit xclip
 
 # Build tools & development
 sudo pacman -S base-devel go stylua
@@ -79,10 +79,6 @@ sudo dnf install wl-clipboard  # For Wayland (GNOME 49+ default)
 # Lazygit
 sudo dnf copr enable atim/lazygit -y
 sudo dnf install lazygit
-
-# Yazi
-sudo dnf copr enable varlad/yazi -y
-sudo dnf install yazi
 
 # Atuin
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
@@ -135,9 +131,6 @@ sudo apt update && sudo apt install eza
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
 curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
 tar xf lazygit.tar.gz lazygit && sudo install lazygit /usr/local/bin && rm lazygit lazygit.tar.gz
-
-# Yazi
-cargo install --locked yazi-fm yazi-cli
 
 # Atuin
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh

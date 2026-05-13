@@ -283,6 +283,17 @@ return {
         })
         vim.lsp.enable("tailwindcss")
 
+        -- prismals (Prisma schema language server)
+        vim.lsp.config("prismals", {
+            filetypes = { "prisma" },
+            settings = {
+                prisma = {
+                    prismaFmtBinPath = "",
+                },
+            },
+        })
+        vim.lsp.enable("prismals")
+
         vim.lsp.enable("astro")
     end,
 }

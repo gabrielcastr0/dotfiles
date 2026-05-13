@@ -4,8 +4,14 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.keymap.set("n", "<leader><leader>", function()
-    vim.cmd("so")
-end)
+    local ft = vim.bo.filetype
+    if ft == "lua" or ft == "vim" then
+        vim.cmd("so")
+        vim.notify("Sourced " .. vim.fn.expand("%:t"), vim.log.levels.INFO)
+    else
+        vim.notify("Cannot source filetype: " .. ft, vim.log.levels.WARN)
+    end
+end, { desc = "source current buffer (lua/vim only)" })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines down in visual selection" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "moves lines up in visual selection" })
@@ -49,6 +55,10 @@ vim.keymap.set("n", "x", '"_x', opts)
 -- Replace the word cursor is on globally
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
     { desc = "Replace word cursor is on globally" })
+
+-- Search and delete all matches of an arbitrary string in file
+vim.keymap.set("n", "<leader>sd", [[:%s///g<Left><Left><Left>]],
+    { desc = "Search and delete all matches in file" })
 
 -- Executes shell command from in here making file executable
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "makes file executable" })
