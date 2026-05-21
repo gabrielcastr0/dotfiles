@@ -11,7 +11,7 @@ return {
 		local conf = require("telescope.config").values
 
 		harpoon:setup({
-			global_settings = {
+			settings = {
 				save_on_toggle = true,
 				save_on_change = true,
 			},
@@ -41,9 +41,9 @@ return {
 		vim.keymap.set("n", "<leader>a", function()
 			harpoon:list():add()
 		end, { desc = "Harpoon add file" })
-		vim.keymap.set("n", "<C-e>", function()
+		vim.keymap.set("n", "<leader>h", function()
 			harpoon.ui:toggle_quick_menu(harpoon:list())
-		end)
+		end, { desc = "Harpoon quick menu" })
 
 		--Harpoon marked files
 		vim.keymap.set("n", "<C-y>", function()
