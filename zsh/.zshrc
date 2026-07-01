@@ -107,16 +107,6 @@ tmux() {
 #     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # fi
 
-# Deno environment
-if [ -f "$HOME/.deno/env" ]; then
-    . "$HOME/.deno/env"
-fi
-
-# Rust environment
-if [ -f "$HOME/.cargo/env" ]; then
-    . "$HOME/.cargo/env"
-fi
-
 # Manually source zsh plugins (fallback if Oh My Zsh doesn't load them)
 if [ -f ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh ]; then
     source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
@@ -135,12 +125,7 @@ export GPG_TTY=$(tty)
 # bun completions
 [ -s "/home/gc4str0/.bun/_bun" ] && source "/home/gc4str0/.bun/_bun"
 
-export QT_STYLE_OVERRIDE=kvantum
-
 alias claude-mem='bun "/home/gc4str0/.claude/plugins/cache/thedotmack/claude-mem/12.1.0/scripts/worker-service.cjs"'
-
-# opencode
-export PATH=/home/gc4str0/.opencode/bin:$PATH
 
 # pnpm
 export PNPM_HOME="/home/gc4str0/.local/share/pnpm"

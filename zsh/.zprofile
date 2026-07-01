@@ -3,6 +3,12 @@ export NVM_DIR="$HOME/.nvm"
 
 export LANG=en_US.UTF-8
 
+# GTK4 GSK rendering backend
+export GSK_RENDERER=vulkan
+
+# Qt widget style (Kvantum)
+export QT_STYLE_OVERRIDE=kvantum
+
 # Default editors
 export EDITOR=nvim
 export VISUAL=nvim
@@ -58,12 +64,33 @@ export PATH=~/.console-ninja/.bin:$PATH
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# opencode
+export PATH=/home/gc4str0/.opencode/bin:$PATH
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
+
 #------------Langs------------
 
 # Golang
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 export PATH=$PATH:$(go env GOPATH)/bin
+
+# Deno environment
+if [ -f "$HOME/.deno/env" ]; then
+    . "$HOME/.deno/env"
+fi
+
+# Rust environment
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi
 
 
 
@@ -74,3 +101,7 @@ export PATH=$PATH:$(go env GOPATH)/bin
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
 
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/gc4str0/.local/bin:$PATH"

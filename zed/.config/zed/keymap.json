@@ -58,7 +58,7 @@
 	},
 	// put key-bindings here if you want them to work ONLY in VISUAL mode
 	{
-		"context": "Editor && vim_mode == visual && !VimWaiting && !menu ",
+		"context": "Editor && (vim_mode == visual || vim_mode == visual_line || vim_mode == visual_block) && !VimWaiting && !menu ",
 		"bindings": {
 			"=": "editor::Format",
 			// Move Lines Up/Down
@@ -68,9 +68,11 @@
 	},
 	// put key-bindings here if you want them to work in NORMAL & VISUAL mode
 	{
-		"context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
+		"context": "Editor && (vim_mode == normal || vim_mode == visual || vim_mode == visual_line || vim_mode == visual_block) && !VimWaiting && !menu",
 		"bindings": {
-			"g ]": "editor::GoToDiagnostic",
+			// Neovim-style "G" — jump to end of buffer (extends selection in visual modes)
+				"shift-g": "vim::EndOfDocument",
+				"g ]": "editor::GoToDiagnostic",
 			"g [": "editor::GoToPreviousDiagnostic",
 			"g r": "editor::FindAllReferences", // find references in directory on word under cursor
 			"space v c a": "editor::ToggleCodeActions",

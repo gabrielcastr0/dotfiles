@@ -1,6 +1,23 @@
 return {
     -- Mini Nvim
     {"echasnovski/mini.nvim", version = false },
+    -- Extra a/i text objects: a)=around parens, i"=inside quotes, af/if=function
+    -- call args, aa/ia=an argument, at/it=tag, plus an/in & al/il for next/last.
+    -- Pure-Lua (no treesitter dependency), so it just works.
+    {
+        "echasnovski/mini.ai",
+        event = { "BufReadPre", "BufNewFile" },
+        config = function()
+            local ai = require("mini.ai")
+            ai.setup({
+                n_lines = 200,
+                custom_textobjects = {
+                    f = ai.gen_spec.function_call(), -- daf / cif on function(...) calls
+                    a = ai.gen_spec.argument(),      -- daa / cia on a single argument
+                },
+            })
+        end,
+    },
     -- Comments
     {
         'echasnovski/mini.comment',

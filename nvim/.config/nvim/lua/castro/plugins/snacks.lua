@@ -210,6 +210,13 @@ return {
 				mode = { "n", "x" },
 			},
 			{
+				"<leader>pe",
+				function()
+					require("snacks").picker.grep({ args = { "--word-regexp" } })
+				end,
+				desc = "Grep Exact Word (whole-word match)",
+			},
+			{
 				"<leader>pk",
 				function()
 					require("snacks").picker.keymaps({ layout = "ivy" })
