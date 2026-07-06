@@ -43,6 +43,7 @@ vim.opt.splitbelow = true
 
 -- misc
 vim.opt.guicursor = ""
+vim.opt.guifont = "Maple Mono:h15"
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 vim.opt.colorcolumn = "0"

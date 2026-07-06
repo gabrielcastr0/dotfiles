@@ -134,3 +134,7 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/gc4str0/.local/bin:$PATH"
