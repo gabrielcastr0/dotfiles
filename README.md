@@ -2,23 +2,6 @@
 
 Personal configuration files for my Linux development environment.
 
-## Quick Start
-
-```bash
-# 1. Install prerequisites
-sudo pacman -S git stow  # Arch
-# sudo apt install git stow  # Ubuntu/Debian
-# sudo dnf install git stow  # Fedora
-
-# 2. Clone and install
-git clone git@github.com:gabrielcastr0/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-
-# 3. Install dependencies (see Dependencies section below)
-
-# 4. Stow configurations
-stow -t ~ */
-```
 
 ## What's Included
 
