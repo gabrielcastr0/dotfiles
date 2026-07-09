@@ -35,8 +35,6 @@ sudo pacman -S base-devel go stylua
 # Fonts
 sudo pacman -S ttf-jetbrains-mono-nerd
 
-# AUR packages
-yay -S atuin
 ```
 
 ### Fedora
@@ -63,8 +61,6 @@ sudo dnf install wl-clipboard  # For Wayland (GNOME 49+ default)
 sudo dnf copr enable atim/lazygit -y
 sudo dnf install lazygit
 
-# Atuin
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
 # Build tools
 sudo dnf groupinstall "Development Tools"
@@ -115,8 +111,6 @@ LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/re
 curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
 tar xf lazygit.tar.gz lazygit && sudo install lazygit /usr/local/bin && rm lazygit lazygit.tar.gz
 
-# Atuin
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
 # Build tools
 sudo apt install build-essential
@@ -161,14 +155,11 @@ git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/.tmux/plugins/tpm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 source ~/.zshrc && nvm install node
 
-# Deno
-curl -fsSL https://deno.land/install.sh | sh
-
 # Bun
 curl -fsSL https://bun.sh/install | bash
 
 # Formatters (after Node.js)
-npm install -g @biomejs/biome prettier
+npm install -g prettier
 
 # Stylua (Lua formatter) - if not installed via pacman
 cargo install stylua
