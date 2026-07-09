@@ -152,7 +152,8 @@ git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/.tmux/plugins/tpm
 
 ```bash
 # Node.js via NVM
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+NVM_VERSION=$(curl -s "https://api.github.com/repos/nvm-sh/nvm/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
+curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
 source ~/.zshrc && nvm install node
 
 # Bun
