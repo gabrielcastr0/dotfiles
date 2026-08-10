@@ -8,7 +8,6 @@ Personal configuration files for my Linux development environment.
 | Config | Description |
 |--------|-------------|
 | **Neovim** | Lazy.nvim, LSP, Treesitter, Telescope, nvim-cmp, and more |
-| **Tmux** | TPM, Catppuccin theme, session management, vim-tmux navigation |
 | **Zsh** | Oh-My-Zsh, Starship prompt, vi mode, shell enhancements |
 | **Starship** | Custom prompt configuration |
 | **Kitty** | Terminal emulator config |
@@ -24,7 +23,7 @@ Install dependencies **before** running stow. Choose your distro below.
 
 ```bash
 # Core tools
-sudo pacman -S zsh tmux neovim starship git stow
+sudo pacman -S zsh neovim starship git stow
 
 # Shell enhancements
 sudo pacman -S zoxide fzf fd ripgrep bat eza tree lazygit xclip
@@ -41,7 +40,7 @@ sudo pacman -S ttf-jetbrains-mono-nerd
 
 ```bash
 # Core tools
-sudo dnf install zsh tmux neovim git stow
+sudo dnf install zsh neovim git stow
 
 # Starship (not in Fedora repos)
 curl -sS https://starship.rs/install.sh | sh
@@ -74,7 +73,7 @@ sudo dnf install jetbrains-mono-fonts-all
 
 ```bash
 # Core tools (excluding Neovim - see below)
-sudo apt install zsh tmux git stow
+sudo apt install zsh git stow
 
 # Neovim 0.11+ (required for LSP config)
 # The apt version is too old, install via AppImage:
@@ -142,12 +141,6 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 
 > **Important:** Do NOT install zsh plugins via system package managers. They install to `/usr/share/` which Oh-My-Zsh doesn't check.
 
-### Tmux Plugin Manager
-
-```bash
-git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/.tmux/plugins/tpm
-```
-
 ### Development Tools (Optional)
 
 ```bash
@@ -177,7 +170,7 @@ cd ~/dotfiles
 stow -t ~ */
 
 # Or stow individually
-stow -t ~ nvim tmux zsh starship kitty ghostty zed scripts
+stow -t ~ nvim zsh starship kitty ghostty zed scripts
 ```
 
 ### Post-Stow Setup
@@ -192,15 +185,7 @@ stow -t ~ nvim tmux zsh starship kitty ghostty zed scripts
    nvim
    ```
 
-3. **Start Tmux and install plugins:**
-   ```bash
-   tmux
-   # Press: Ctrl+a then Shift+I (capital i)
-   # Or run directly:
-   ~/.config/tmux/.tmux/plugins/tpm/bin/install_plugins
-   ```
-
-4. **Restart your terminal** to apply all changes.
+3. **Restart your terminal** to apply all changes.
 
 ## Scripts
 
@@ -209,22 +194,11 @@ Custom scripts are symlinked to `~/scripts/`:
 | Script | Alias | Description |
 |--------|-------|-------------|
 | `fzf-git.sh` | `Ctrl+g` | Enhanced git operations with fzf |
-| `tmux-sessionizer` | `tns` | Quick tmux session switching |
 | `fzf_listoldfiles.sh` | `nlof` | Browse recent Neovim files |
 | `zoxide_openfiles_nvim.sh` | `nzo` | Open files from zoxide history |
 | `nvim-update` | - | Update Neovim AppImage to latest version |
 
-### Customize tmux-sessionizer paths
 
-Edit `~/scripts/tmux-sessionizer`:
-```bash
-SEARCH_DIRS=(
-    "$HOME/Documents/Projects"
-    "$HOME/Desktop"
-    "$HOME/dev"
-    "$HOME/work"
-)
-```
 
 ## Configuration Locations
 
@@ -233,7 +207,6 @@ After stowing, configs are symlinked to:
 | Config | Location |
 |--------|----------|
 | Neovim | `~/.config/nvim/` |
-| Tmux | `~/.config/tmux/` |
 | Starship | `~/.config/starship/` |
 | Kitty | `~/.config/kitty/` |
 | Ghostty | `~/.config/ghostty/` |
@@ -245,12 +218,10 @@ After stowing, configs are symlinked to:
 
 ### Themes
 - **Neovim:** `<leader>ths` to open theme switcher
-- **Tmux:** Edit Catppuccin flavor in `tmux/.config/tmux/tmux.conf`
 - **Starship:** Modify palette in `starship/.config/starship/starship.toml`
 
 ### Keybindings
 - **Neovim:** `nvim/.config/nvim/lua/castro/core/keymaps.lua`
-- **Tmux:** `tmux/.config/tmux/tmux.conf`
 - **Zsh:** `zsh/.zshrc`
 
 ### Adding Neovim Plugins
@@ -293,13 +264,6 @@ pipx ensurepath
 ```
 Restart your terminal and reopen Neovim.
 
-### Tmux: Plugins not loading
-```bash
-rm -rf ~/.config/tmux/.tmux/plugins/tpm
-git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/.tmux/plugins/tpm
-# Restart tmux, press Ctrl+b then I
-```
-
 ### Icons not displaying
 Install a Nerd Font and configure your terminal to use it.
 
@@ -307,7 +271,6 @@ Install a Nerd Font and configure your terminal to use it.
 
 - [folke](https://github.com/folke) - lazy.nvim and Neovim plugins
 - [junegunn](https://github.com/junegunn) - fzf and fzf-git.sh
-- [ThePrimeagen](https://github.com/ThePrimeagen) - tmux-sessionizer inspiration
 
 ## License
 

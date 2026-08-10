@@ -1,24 +1,24 @@
-# Zsh Aliases
-
+# ---------- GO ----------
 # HACK: For Running Go Server using Air
 alias air='$(go env GOPATH)/bin/air'
 
-# General shortcuts
+# ---------- GENERAL ----------
 alias c="clear"
 alias e="exit"
+
+# ---------- EDITOR ----------
 alias vim="nvim"
+alias nvim-scratch="NVIM_APPNAME=nvim-scratch nvim"
 
-# Tmux
-alias a="attach"
-alias tns="~/scripts/tmux-sessionizer"
 
-# fzf
+# ---------- FZF ----------
 alias nlof="~/scripts/fzf_listoldfiles.sh"
 alias fman="compgen -c | fzf | xargs man"
 
-# zoxide
+# ---------- ZOXIDE ----------
 alias nzo="~/scripts/zoxide_openfiles_nvim.sh"
 
+# ---------- LS & TREE REPLACEMENTS ----------
 # eza (ls replacement)
 # options: --no-filesize --no-time --no-permissions
 alias ls="eza --long --color=always --icons=always"
@@ -30,22 +30,17 @@ alias dtree="tree -L 3 -a -d -I '.git' --charset X "
 # lstr
 alias lstr="lstr --icons"
 
-# git aliases
+# ---------- GIT ----------
 alias gt="git"
 alias ga="git add ."
 alias gs="git status -s"
 alias gc='git commit -m'
 alias glog='git log --oneline --graph --all'
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
-
-# neovim scratch
-alias nvim-scratch="NVIM_APPNAME=nvim-scratch nvim"
-
-# lazygit
 alias lg="lazygit"
 
-# lazydocker
+# ---------- DOCKER ----------
 alias lzd="lazydocker"
 
-# mpd start alias
+# ---------- MEDIA ----------
 alias mpds="mpd ~/.config/mpd/mpd.conf"
