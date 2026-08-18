@@ -14,6 +14,8 @@ fi
 # Set GPG TTY for proper graphical passphrase prompts
 export GPG_TTY=$(tty)
 
+export SUDO_EDITOR="$(command -v nvim)"
+
 #User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -101,7 +103,13 @@ eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
 # FZF
-eval "$(fzf --zsh)"
+fzf_zsh_integration=$(fzf --zsh 2>/dev/null)
+if [ $? -eq 0 ]; then
+    eval "$fzf_zsh_integration"
+else
+    [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+    [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+fi
 
 # FZF with Git right in the shell by Junegunn : check out his github below
 # Keymaps for this is available at https://github.com/junegunn/fzf-git.sh
