@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# Verify that this machine matches DOTFILES.md: stow links point into the repo,
+# required commands exist, and the shell starts cleanly. Read-only; never fixes.
+#
+# The package and command lists are parsed from fenced blocks in DOTFILES.md
+# (```text <name>), so the markdown stays the single source of truth.
+
+set -uo pipefail
+
+self="$(readlink -f "${BASH_SOURCE[0]}")"
+repo="${DOTFILES_DIR:-$(cd "$(dirname "$self")/../.." && pwd)}"
+spec="$repo/DOTFILES.md"
+target="${STOW_TARGET:-$HOME}"
+
+failures=0
+warnings=0
+
+if [[ -t 1 ]]; then
+    red=$'\e[31m' yellow=$'\e[33m' green=$'\e[32m' bold=$'\e[1m' reset=$'\e[0m'
+else
+    red='' yellow='' green='' bold='' reset=''
+fi
+
+ok() { printf '  %sok%s    %s\n' "$green" "$reset" "$1"; }
+warn() { printf '  %swarn%s  %s\n' "$yellow" "$reset" "$1"; warnings=$((warnings + 1)); }
+fail() { printf '  %sFAIL%s  %s\n' "$red" "$reset" "$1"; failures=$((failures + 1)); }
+section() { printf '\n%s%s%s\n' "$bold" "$1" "$reset"; }
+
+# Print the non-comment lines of the ```text <name> block in DOTFILES.md.
+spec_block() {
+    awk -v name="$1" '
+        $0 == "```text " name { inside = 1; next }
+        inside && /^```/ { exit }
+        inside && NF && $1 !~ /^#/ { print $1 }
+    ' "$spec"
+}
+
+if [[ ! -r "$spec" ]]; then
+    printf 'DOTFILES.md not found at %s (set DOTFILES_DIR)\n' "$spec" >&2
+    exit 2
+fi
+
+section "Stow links ($repo -> $target)"
+mapfile -t packages < <(spec_block stow-packages)
+[[ ${#packages[@]} -gt 0 ]] || fail "no stow-packages block found in DOTFILES.md"
+for pkg in "${packages[@]}"; do
+    if [[ ! -d "$repo/$pkg" ]]; then
+        fail "$pkg: package directory missing from repo"
+        continue
+    fi
+    broken=()
+    while IFS= read -r -d '' src; do
+        rel="${src#"$repo/$pkg/"}"
+        [[ "$(readlink -f "$target/$rel" 2>/dev/null)" == "$(readlink -f "$src")" ]] || broken+=("$rel")
+    done < <(find "$repo/$pkg" -type f -print0)
+    if [[ ${#broken[@]} -eq 0 ]]; then
+        ok "$pkg"
+    else
+        fail "$pkg: not linked: ${broken[*]:0:5}$([[ ${#broken[@]} -gt 5 ]] && echo " (+$((${#broken[@]} - 5)) more)")"
+    fi
+done
+
+section "Required commands"
+while IFS= read -r cmd; do
+    if command -v "$cmd" >/dev/null 2>&1; then ok "$cmd"; else fail "$cmd: not on PATH"; fi
+done < <(spec_block required-commands)
+
+section "Optional commands"
+while IFS= read -r cmd; do
+    if command -v "$cmd" >/dev/null 2>&1; then ok "$cmd"; else warn "$cmd: not installed"; fi
+done < <(spec_block optional-commands)
+
+section "Versions"
+if command -v nvim >/dev/null 2>&1; then
+    nvim_version="$(nvim --version | head -1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+    if [[ "$(printf '%s\n' 0.11 "$nvim_version" | sort -V | head -1)" == 0.11 ]]; then
+        ok "neovim $nvim_version (>= 0.11)"
+    else
+        fail "neovim $nvim_version is older than 0.11 (LSP config uses vim.lsp.config)"
+    fi
+fi
+
+section "Shell"
+if [[ "$(getent passwd "$USER" | cut -d: -f7)" == */zsh ]]; then
+    ok "login shell is zsh"
+else
+    warn "login shell is not zsh (run: chsh -s \"\$(command -v zsh)\")"
+fi
+if command -v zsh >/dev/null 2>&1; then
+    shell_errors="$(zsh -i -c exit 2>&1 >/dev/null)"
+    shell_status=$?
+    if [[ $shell_status -ne 0 ]]; then
+        fail "zsh -i exited with status $shell_status: ${shell_errors%%$'\n'*}"
+    elif [[ -z "$shell_errors" ]]; then
+        ok "zsh -i starts without errors"
+    else
+        fail "zsh -i printed errors: ${shell_errors%%$'\n'*}"
+    fi
+fi
+for rc in .zshrc .zprofile .zshenv .zaliases; do
+    [[ -e "$target/$rc" && ! -L "$target/$rc" ]] && fail "$rc is a regular file; an installer probably replaced the symlink (move its additions to ~/.zshrc.local)"
+done
+
+printf '\n%s failure(s), %s warning(s)\n' "$failures" "$warnings"
+[[ $failures -eq 0 ]]

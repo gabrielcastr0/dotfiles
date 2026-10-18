@@ -1,276 +1,39 @@
 # Dotfiles
 
-Personal configuration files for my Linux development environment.
+Personal configuration for my Linux development environment: zsh, Neovim,
+Starship, Ghostty, Zed and a few scripts. It runs on top of
+[Omarchy](https://omarchy.org) (Arch + Hyprland).
 
+## Setup
 
-## What's Included
+Everything you need to set up a machine lives in **[`DOTFILES.md`](DOTFILES.md)**:
+packages and why each one is there, how to link the configs, post-setup steps,
+and the known differences on other distros.
 
-| Config | Description |
-|--------|-------------|
-| **Neovim** | Lazy.nvim, LSP, Treesitter, Telescope, nvim-cmp, and more |
-| **Zsh** | Oh-My-Zsh, Starship prompt, vi mode, shell enhancements |
-| **Starship** | Custom prompt configuration |
-| **Kitty** | Terminal emulator config |
-| **Ghostty** | Terminal emulator config (Rosé Pine theme, tmux-like keybinds) |
-| **Zed** | Code editor settings |
-| **Scripts** | Custom utilities (fzf-git, tmux-sessionizer, etc.) |
+You can follow it by hand, or hand it to an agent:
 
-## Dependencies
+> Read AGENTS.md and DOTFILES.md, then set up this computer.
 
-Install dependencies **before** running stow. Choose your distro below.
-
-### Arch Linux
+The agent rules are in [`AGENTS.md`](AGENTS.md). Either way, the result is
+checked by a read-only script:
 
 ```bash
-# Core tools
-sudo pacman -S zsh neovim starship git stow
-
-# Shell enhancements
-sudo pacman -S zoxide fzf fd ripgrep bat eza tree lazygit xclip
-
-# Build tools & development
-sudo pacman -S base-devel go stylua
-
-# Fonts
-sudo pacman -S ttf-jetbrains-mono-nerd
-
+dotfiles-doctor   # linked to ~/scripts once the scripts package is stowed
 ```
 
-### Fedora
+## Quick start (Omarchy/Arch)
 
 ```bash
-# Core tools
-sudo dnf install zsh neovim git stow
-
-# Starship (not in Fedora repos)
-curl -sS https://starship.rs/install.sh | sh
-
-# Eza (retired from official repos in Fedora 42+, use COPR)
-sudo dnf copr enable alternateved/eza -y
-sudo dnf install eza
-
-# Shell enhancements
-sudo dnf install zoxide fzf fd-find ripgrep bat tree golang
-
-# Clipboard tools
-sudo dnf install wl-clipboard  # For Wayland (GNOME 49+ default)
-# sudo dnf install xclip       # For X11 sessions only
-
-# Lazygit
-sudo dnf copr enable atim/lazygit -y
-sudo dnf install lazygit
-
-
-# Build tools
-sudo dnf groupinstall "Development Tools"
-
-# Fonts
-sudo dnf install jetbrains-mono-fonts-all
-# For Nerd Font icons, download from https://www.nerdfonts.com/font-downloads
+git clone git@github.com:gabrielcastr0/dotfiles.git ~/Documents/Projects/dotfiles
+cd ~/Documents/Projects/dotfiles
+stow -t ~ --restow nvim zsh starship ghostty zed scripts
+scripts/scripts/dotfiles-doctor
 ```
-
-### Ubuntu/Debian
-
-```bash
-# Core tools (excluding Neovim - see below)
-sudo apt install zsh git stow
-
-# Neovim 0.11+ (required for LSP config)
-# The apt version is too old, install via AppImage:
-curl -LO https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.appimage
-chmod u+x nvim-linux-x86_64.appimage
-mkdir -p ~/.local/bin
-mv nvim-linux-x86_64.appimage ~/.local/bin/nvim
-# Add to PATH (add this to ~/.zshrc or ~/.bashrc):
-# export PATH="$HOME/.local/bin:$PATH"
-
-# pipx (required for Mason to install Python tools like isort, pylint)
-sudo apt install pipx
-pipx ensurepath
-
-# Starship
-curl -sS https://starship.rs/install.sh | sh
-
-# Shell enhancements
-sudo apt install fzf fd-find ripgrep bat eza tree xclip golang
-
-# Zoxide
-curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-
-# Eza
-sudo apt install gpg
-sudo mkdir -p /etc/apt/keyrings
-wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
-sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-sudo apt update && sudo apt install eza
-
-# Lazygit
-LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-tar xf lazygit.tar.gz lazygit && sudo install lazygit /usr/local/bin && rm lazygit lazygit.tar.gz
-
-
-# Build tools
-sudo apt install build-essential
-
-# Fonts
-mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts
-curl -fLo "JetBrainsMono Nerd Font.ttf" \
-  https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf
-fc-cache -fv
-```
-
-> **Note for Ubuntu/Debian:** `fd-find` is installed as `fdfind` and `bat` as `batcat`. Create aliases:
-> ```bash
-> mkdir -p ~/.local/bin
-> ln -s $(which fdfind) ~/.local/bin/fd
-> ln -s $(which batcat) ~/.local/bin/bat
-> ```
-
-### Oh-My-Zsh + Plugins
-
-```bash
-# Install Oh-My-Zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Install plugins (MUST be cloned to Oh-My-Zsh custom directory)
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-```
-
-> **Important:** Do NOT install zsh plugins via system package managers. They install to `/usr/share/` which Oh-My-Zsh doesn't check.
-
-### Development Tools (Optional)
-
-```bash
-# Node.js via NVM
-NVM_VERSION=$(curl -s "https://api.github.com/repos/nvm-sh/nvm/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
-curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
-source ~/.zshrc && nvm install node
-
-# Bun
-curl -fsSL https://bun.sh/install | bash
-
-# Formatters (after Node.js)
-npm install -g prettier
-
-# Stylua (Lua formatter) - if not installed via pacman
-cargo install stylua
-```
-
-## Installation
-
-After installing all dependencies:
-
-```bash
-cd ~/dotfiles
-
-# Stow all configurations
-stow -t ~ */
-
-# Or stow individually
-stow -t ~ nvim zsh starship kitty ghostty zed scripts
-```
-
-### Post-Stow Setup
-
-1. **Set Zsh as default shell:**
-   ```bash
-   chsh -s $(which zsh)
-   ```
-
-2. **Open Neovim** - Lazy.nvim will auto-install plugins:
-   ```bash
-   nvim
-   ```
-
-3. **Restart your terminal** to apply all changes.
-
-## Scripts
-
-Custom scripts are symlinked to `~/scripts/`:
-
-| Script | Alias | Description |
-|--------|-------|-------------|
-| `fzf-git.sh` | `Ctrl+g` | Enhanced git operations with fzf |
-| `fzf_listoldfiles.sh` | `nlof` | Browse recent Neovim files |
-| `zoxide_openfiles_nvim.sh` | `nzo` | Open files from zoxide history |
-| `nvim-update` | - | Update Neovim AppImage to latest version |
-
-
-
-## Configuration Locations
-
-After stowing, configs are symlinked to:
-
-| Config | Location |
-|--------|----------|
-| Neovim | `~/.config/nvim/` |
-| Starship | `~/.config/starship/` |
-| Kitty | `~/.config/kitty/` |
-| Ghostty | `~/.config/ghostty/` |
-| Zed | `~/.config/zed/` |
-| Zsh | `~/.zshrc`, `~/.zprofile` |
-| Scripts | `~/scripts/` |
-
-## Customization
-
-### Themes
-- **Neovim:** `<leader>ths` to open theme switcher
-- **Starship:** Modify palette in `starship/.config/starship/starship.toml`
-
-### Keybindings
-- **Neovim:** `nvim/.config/nvim/lua/castro/core/keymaps.lua`
-- **Zsh:** `zsh/.zshrc`
-
-### Adding Neovim Plugins
-Add plugin files to `nvim/.config/nvim/lua/castro/plugins/` - Lazy.nvim auto-loads them.
-
-## Troubleshooting
-
-### Zsh: Plugin not found
-```
-[oh-my-zsh] plugin 'zsh-autosuggestions' not found
-```
-Plugins must be cloned to `~/.oh-my-zsh/custom/plugins/`. See [Oh-My-Zsh + Plugins](#oh-my-zsh--plugins).
-
-### Zsh: Command not found
-Ensure all tools are installed and paths are set. Run `source ~/.zshrc` after changes.
-
-### Neovim: Plugins not loading
-```bash
-rm ~/.config/nvim/lazy-lock.json
-nvim
-```
-
-### Neovim: LSP not working
-```vim
-:Mason      " Check installations
-:LspInfo    " Check LSP status
-```
-
-### Neovim: nvim-lspconfig deprecation warning
-```
-nvim-lspconfig support for Nvim 0.10 or older is deprecated
-```
-The LSP config uses Neovim 0.11+ APIs (`vim.lsp.config`, `vim.lsp.enable`). Install Neovim 0.11+ via AppImage - see [Ubuntu/Debian](#ubuntudebian) instructions.
-
-### Mason: Python tools fail to install (isort, pylint)
-On Debian/Ubuntu, pip cannot install packages globally (PEP 668). Install pipx:
-```bash
-sudo apt install pipx
-pipx ensurepath
-```
-Restart your terminal and reopen Neovim.
-
-### Icons not displaying
-Install a Nerd Font and configure your terminal to use it.
 
 ## Credits
 
-- [folke](https://github.com/folke) - lazy.nvim and Neovim plugins
-- [junegunn](https://github.com/junegunn) - fzf and fzf-git.sh
+- [folke](https://github.com/folke): lazy.nvim and Neovim plugins
+- [junegunn](https://github.com/junegunn): fzf and fzf-git.sh
 
 ## License
 

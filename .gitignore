@@ -1,1 +1,9 @@
 # Dotfiles gitignore
+
+# Backups belong in ~/.dotfiles-backup/, never next to the configs
+*.bak
+*.bak.*
+
+# Machine-specific shell overrides
+.zshrc.local
+.zshenv.local

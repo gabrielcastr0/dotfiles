@@ -1,10 +1,13 @@
 # By default Reload config with shft + cmd + ,
-config-file = themes/rosepine
+config-file = ?"~/.local/state/omarchy/current/theme/ghostty.conf"
+# Pin new surfaces to the account's preferred shell even when an older Omarchy
+# desktop session still exports SHELL=/usr/bin/bash.
+command = /usr/bin/zsh
 background-opacity = 0.88
 background-blur-radius = 25
 
 font-family = Maple Mono
-font-size = 15
+font-size = 11
 cursor-style = block
 cursor-style-blink = false
 cursor-color = cell-foreground
@@ -23,6 +26,7 @@ auto-update = check
 auto-update-channel = stable
 
 # extras
+shell-integration = none
 shell-integration-features = no-cursor
 copy-on-select = clipboard
 # cmd or alt c copy (not vim yank)
