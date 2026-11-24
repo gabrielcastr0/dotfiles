@@ -7,4 +7,6 @@ if [[ -r /usr/share/omarchy/default/bash/env-bootstrap ]]; then
 fi
 
 # Machine-specific settings also apply to non-interactive shells.
-[[ -r "$HOME/.zshenv.local" ]] && source "$HOME/.zshenv.local"
+if [[ -r "$HOME/.zshenv.local" ]]; then
+    source "$HOME/.zshenv.local"
+fi

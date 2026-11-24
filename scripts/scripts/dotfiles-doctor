@@ -60,6 +60,14 @@ for pkg in "${packages[@]}"; do
     fi
 done
 
+section "Ghostty entry config"
+if grep -Eq '^[[:space:]]*config-file[[:space:]]*=[[:space:]]*personal\.conf[[:space:]]*$' \
+    "$target/.config/ghostty/config" 2>/dev/null; then
+    ok "Ghostty entry config includes personal.conf"
+else
+    fail "Ghostty entry config is missing the personal.conf include (see DOTFILES.md)"
+fi
+
 section "Required commands"
 while IFS= read -r cmd; do
     if command -v "$cmd" >/dev/null 2>&1; then ok "$cmd"; else fail "$cmd: not on PATH"; fi
@@ -73,10 +81,10 @@ done < <(spec_block optional-commands)
 section "Versions"
 if command -v nvim >/dev/null 2>&1; then
     nvim_version="$(nvim --version | head -1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?')"
-    if [[ "$(printf '%s\n' 0.11 "$nvim_version" | sort -V | head -1)" == 0.11 ]]; then
-        ok "neovim $nvim_version (>= 0.11)"
+    if [[ "$(printf '%s\n' 0.12 "$nvim_version" | sort -V | head -1)" == 0.12 ]]; then
+        ok "neovim $nvim_version (>= 0.12)"
     else
-        fail "neovim $nvim_version is older than 0.11 (LSP config uses vim.lsp.config)"
+        fail "neovim $nvim_version is older than 0.12 (required by Treesitter)"
     fi
 fi
 

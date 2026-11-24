@@ -1,7 +1,7 @@
 # Dotfiles
 
 Personal configuration for my Linux development environment: zsh, Neovim,
-Starship, Ghostty, Zed and a few scripts. It runs on top of
+Starship, Ghostty and a few scripts. It runs on top of
 [Omarchy](https://omarchy.org) (Arch + Hyprland).
 
 ## Setup
@@ -26,9 +26,12 @@ dotfiles-doctor   # linked to ~/scripts once the scripts package is stowed
 ```bash
 git clone git@github.com:gabrielcastr0/dotfiles.git ~/Documents/Projects/dotfiles
 cd ~/Documents/Projects/dotfiles
-stow -t ~ --restow nvim zsh starship ghostty zed scripts
-scripts/scripts/dotfiles-doctor
+stow -n -v -t ~ nvim zsh starship ghostty scripts
+stow -t ~ nvim zsh starship ghostty scripts
 ```
+
+Follow the [Ghostty entry config and post-setup steps](DOTFILES.md#ghostty-entry-config),
+then run `scripts/scripts/dotfiles-doctor`.
 
 ## Credits
 

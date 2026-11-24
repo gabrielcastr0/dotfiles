@@ -1,43 +1,41 @@
+local parsers = {
+    "json",
+    "javascript",
+    "typescript",
+    "tsx",
+    "go",
+    "yaml",
+    "html",
+    "css",
+    "python",
+    "http",
+    "prisma",
+    "markdown",
+    "markdown_inline",
+    "svelte",
+    "graphql",
+    "bash",
+    "lua",
+    "vim",
+    "dockerfile",
+    "gitignore",
+    "query",
+    "vimdoc",
+    "c",
+    "java",
+    "rust",
+    "ron",
+}
+
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        event = { "BufReadPre", "BufNewFile" },
+        lazy = false,
         build = ":TSUpdate",
-        main = "nvim-treesitter",
-        opts = {
-            ensure_installed = {
-                "json",
-                "javascript",
-                "typescript",
-                "tsx",
-                "go",
-                "yaml",
-                "html",
-                "css",
-                "python",
-                "http",
-                "prisma",
-                "markdown",
-                "markdown_inline",
-                "svelte",
-                "graphql",
-                "bash",
-                "lua",
-                "vim",
-                "dockerfile",
-                "gitignore",
-                "query",
-                "vimdoc",
-                "c",
-                "java",
-                "rust",
-                "ron",
-            },
-        },
-        config = function(_, opts)
-            require("nvim-treesitter").setup(opts)
+        config = function()
+            require("nvim-treesitter").install(parsers)
 
-            -- Enable treesitter-based highlighting and indentation (built into Neovim)
+            -- Enable highlighting for buffers with an available parser.
             vim.api.nvim_create_autocmd("FileType", {
                 callback = function()
                     pcall(vim.treesitter.start)

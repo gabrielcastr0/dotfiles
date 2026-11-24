@@ -30,31 +30,30 @@ already shipped by Omarchy will be skipped.
 | `zsh` | Login shell. |
 | `zsh-autosuggestions`, `zsh-syntax-highlighting` | Sourced by `.zshrc` from `/usr/share/zsh/plugins/`. Install them as system packages; there is no plugin manager. |
 | `starship` | Prompt (`starship/.config/starship/starship.toml`). |
-| `neovim` | Editor. Must be **>= 0.11**, because the LSP config uses `vim.lsp.config` / `vim.lsp.enable`. |
+| `neovim` | Editor. Must be **>= 0.12**, as required by the pinned Treesitter plugin. |
 | `git`, `stow` | Clone this repo and link it into `$HOME`. |
-| `ghostty` | Active terminal (first in `~/.config/xdg-terminals.list`). |
-| `zed` | Secondary editor (`zeditor`). |
+| `ghostty` | Personal terminal. Set it as the default after testing. |
 | `fzf`, `fd`, `ripgrep`, `bat`, `eza`, `tree` | `FZF_*` defaults in `.zprofile` use `fd`, `bat` and `eza` for previews. Telescope uses `ripgrep`. |
 | `zoxide` | `z` and the `nzo` script. Omarchy's `zd` helper also depends on it. |
 | `jq` | Completion for the `omarchy` command in `.zshrc`. |
 | `lazygit`, `lazydocker` | `lg` / `lzd` aliases. |
 | `mise` | Version manager for runtimes (see below). Omarchy repo ships it as `mise-bin`. |
 | `wl-clipboard` | Clipboard for Neovim on Wayland. |
-| `ttf-jetbrains-mono-nerd`, `maple-mono-nf-cn-unhinted` (AUR) | Nerd Font glyphs. Ghostty uses Maple Mono. Omarchy ships a JetBrains Mono Nerd variant. |
-| `base-devel` | Build toolchain (Treesitter parsers, Mason builds). |
+| JetBrains Mono Nerd Font | Nerd Font glyphs. Use the Omarchy-provided font or install a distribution equivalent. |
+| `base-devel`, `tree-sitter-cli` | Build toolchain and parser compiler for the pinned Treesitter plugin. |
 
 Optional, nice to have: `tldr` (`TEALDEER_CONFIG_DIR` is set), `tobi-try`
 (Omarchy repo, lazily initialised `try`), `lstr` (aliased if present).
 
 ### Runtimes via mise
 
-Go, Node.js, pnpm and `gh` come from `mise`, not from pacman.
+Use the available system runtimes or configure missing versions via `mise`. Omarchy already provisions `gh` through its system mise config.
 `~/.config/mise/config.toml` is **not tracked in this repo yet**, so recreate
 it by hand or copy it from the old machine. `.zshrc` runs `mise activate zsh`.
 
 Neovim installs its own LSP servers and formatters through Mason
 (`nvim/.config/nvim/lua/castro/plugins/lsp/mason.lua`). Some Mason packages
-need Node.js and Go on `PATH`, so set up `mise` before opening Neovim.
+need Node.js, npm and Go on `PATH`, so set up `mise` before opening Neovim.
 
 ## Clone and link
 
@@ -64,7 +63,8 @@ so keep it at that path.
 ```bash
 git clone git@github.com:gabrielcastr0/dotfiles.git ~/Documents/Projects/dotfiles
 cd ~/Documents/Projects/dotfiles
-stow -t ~ --restow nvim zsh starship ghostty zed scripts
+stow -n -v -t ~ nvim zsh starship ghostty scripts
+stow -t ~ nvim zsh starship ghostty scripts
 ```
 
 Packages that must be stowed (read by `dotfiles-doctor`):
@@ -74,24 +74,39 @@ nvim
 zsh
 starship
 ghostty
-zed
 scripts
 ```
-
-`kitty/` is intentionally **not** in the list. Kitty is not installed, and the
-package is kept only as a reference for the old themes (decay, eldritch,
-oxocarbon).
 
 If stow reports a conflict, an unmanaged file already exists at the target.
 Move it to `~/.dotfiles-backup/<timestamp>/`, re-run stow, and then check
 whether the old file held anything that should move into the repo or into
-`~/.zshrc.local`.
+`~/.zshrc.local`. When replacing Omarchy’s Neovim profile, back up its whole
+configuration, data, state and cache directories. Stage the personal profile
+with separate XDG directories before switching the default.
+
+### Ghostty entry config
+
+The Ghostty package links `~/.config/ghostty/personal.conf` and its fallback palettes.
+Keep `~/.config/ghostty/config` as a regular file so Omarchy can manage fonts.
+After backing up the entry config, add the following line once, after the
+distribution settings. On other distros, add `config-file = themes/rosepine`
+above that line in a new entry config.
+
+```ini
+config-file = personal.conf
+```
+
+On an Omarchy session that still exports the old login shell after `chsh`,
+set `command = /usr/bin/zsh` in the regular entry config if needed.
+Check the include after an Omarchy terminal refresh. Validate with
+`ghostty +validate-config` before selecting Ghostty with
+`omarchy default terminal ghostty`.
 
 ## Post-setup
 
 1. Set the login shell: `chsh -s "$(command -v zsh)"`.
 2. Open Neovim to install plugins with lazy.nvim and tools with Mason.
-   `lazy-lock.json` is generated locally and is not tracked in this repo.
+   The repository lockfile pins the plugin revisions. Review changes to it before sharing.
 3. Create `~/.zshrc.local` and, if needed, `~/.zshenv.local` for anything
    machine-specific (see below).
 4. Open a new terminal and run `dotfiles-doctor`.
@@ -128,7 +143,8 @@ is read-only and checks the following:
 - every file in each `stow-packages` package resolves to the repo;
 - every `required-commands` entry is on `PATH`, and the optional ones are
   reported as warnings;
-- Neovim is >= 0.11;
+- the Ghostty entry config includes the stowed personal config;
+- Neovim is >= 0.12;
 - zsh is the login shell and `zsh -i` starts without printing errors;
 - the zsh rc files are still symlinks.
 
@@ -150,11 +166,11 @@ lazygit
 mise
 ghostty
 wl-copy
+tree-sitter
 ```
 
 ```text optional-commands
 lazydocker
-zeditor
 gh
 go
 node
@@ -171,7 +187,6 @@ lstr
 | Neovim | `nvim/.config/nvim/` | lazy.nvim. Plugins are auto-loaded from `lua/castro/plugins/`, and keymaps live in `lua/castro/core/keymaps.lua`. `<leader>ths` opens the theme switcher; `<leader>mk` toggles the mdkite browser preview and `<leader>mr` refreshes it. |
 | Starship | `starship/.config/starship/starship.toml` | Palette and modules. |
 | Ghostty | `ghostty/.config/ghostty/` | Theme from Omarchy; local `themes/` (rosepine, tokyonight) as fallbacks. |
-| Zed | `zed/.config/zed/` | `settings.json` and `keymap.json`. |
 | Scripts | `scripts/scripts/` → `~/scripts` | `fzf_listoldfiles.sh` (`nlof`), `zoxide_openfiles_nvim.sh` (`nzo`), `nvim-update` (AppImage updater, non-Arch only), `dotfiles-doctor`, and `fzf-git.sh` (present but not sourced by `.zshrc`). |
 
 ## Other distros
@@ -183,8 +198,7 @@ Known differences to handle when not on Arch:
   `/usr/share/zsh-syntax-highlighting/`. Symlink them into the Arch path, or
   the plugins silently don't load.
 - **Omarchy:** without it, `$OMARCHY_PATH` is unset and the Omarchy blocks in
-  `.zshrc` are skipped. Ghostty will not find its theme file; set
-  `config-file = themes/rosepine` instead.
+  `.zshrc` are skipped. Ghostty can use the bundled Rose Pine palette as described above.
 - **Neovim:** the apt version is too old. Use the AppImage in `~/.local/bin`
   and keep it updated with `~/scripts/nvim-update`.
 - **Ubuntu/Debian binary names:** `fd` is `fdfind` and `bat` is `batcat`, so

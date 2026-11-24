@@ -71,63 +71,10 @@ if command -v try >/dev/null 2>&1; then
 fi
 
 # ---------- OMARCHY ----------
-# Omarchy's aliases and function modules currently parse in zsh. Load those
-# portable pieces directly so the desktop's convenience commands are retained.
-if [[ -r "$OMARCHY_PATH/default/bash/aliases" ]]; then
+# Import Omarchy's aliases when available. Its Bash functions stay in Bash.
+if [[ -r "${OMARCHY_PATH:-}/default/bash/aliases" ]]; then
     source "$OMARCHY_PATH/default/bash/aliases"
 fi
-
-for omarchy_function_file in "$OMARCHY_PATH"/default/bash/fns/*(N.); do
-    source "$omarchy_function_file"
-done
-unset omarchy_function_file
-
-# Two Omarchy layout helpers use Bash's zero-based array indexing. Run their
-# original bodies with ksh-style arrays scoped to the call only.
-if (( $+functions[hsl] )); then
-    functions[_omarchy_hsl]=$functions[hsl]
-    hsl() {
-        setopt localoptions ksharrays
-        _omarchy_hsl "$@"
-    }
-fi
-
-if (( $+functions[tsl] )); then
-    functions[_omarchy_tsl]=$functions[tsl]
-    tsl() {
-        setopt localoptions ksharrays
-        _omarchy_tsl "$@"
-    }
-fi
-
-# Bash's `read -p` means "show a prompt" while zsh uses it for a coprocess.
-# Keep the Omarchy drive helper's confirmation gate with native zsh syntax.
-format-drive() {
-    if (( $# != 2 )); then
-        echo "Usage: format-drive <device> <name>"
-        echo "Example: format-drive /dev/sda 'My Stuff'"
-        echo -e "\nAvailable drives:"
-        lsblk -d -o NAME -n | awk '{print "/dev/"$1}'
-        return
-    fi
-
-    echo "WARNING: This will completely erase all data on $1 and label it '$2'."
-    local confirm
-    read -r "confirm?Are you sure you want to continue? (y/N): "
-    if [[ $confirm == [Yy] ]]; then
-        sudo wipefs -a "$1"
-        sudo dd if=/dev/zero of="$1" bs=1M count=100 status=progress
-        sudo parted -s "$1" mklabel gpt
-        sudo parted -s "$1" mkpart primary 1MiB 100%
-        sudo parted -s "$1" set 1 msftdata on
-
-        local partition="$([[ $1 == *nvme* ]] && echo "${1}p1" || echo "${1}1")"
-        sudo partprobe "$1" || true
-        sudo udevadm settle || true
-        sudo mkfs.exfat -n "$2" "$partition"
-        echo "Drive $1 formatted as exFAT and labeled '$2'."
-    fi
-}
 
 # Lightweight completion for the unified Omarchy command. The command catalog
 # is queried at completion time, so new Omarchy subcommands appear after updates.
@@ -145,7 +92,9 @@ _omarchy() {
         _files
     fi
 }
-compdef _omarchy omarchy
+if command -v omarchy >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+    compdef _omarchy omarchy
+fi
 
 # ---------- ALIASES ----------
 # Personal aliases intentionally load after Omarchy's aliases. Conflicting old
@@ -184,4 +133,6 @@ fi
 # Machine-specific lines (tool installer hooks, hostnames, secrets) belong in
 # ~/.zshrc.local, which is not tracked. Keeping them out of this file stops
 # installers from replacing the stow symlink with a regular file.
-[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+if [[ -r "$HOME/.zshrc.local" ]]; then
+    source "$HOME/.zshrc.local"
+fi

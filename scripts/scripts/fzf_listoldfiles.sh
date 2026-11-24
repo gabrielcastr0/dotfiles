@@ -6,7 +6,7 @@
 
 # Get the list of old files from Neovim's shada/viminfo
 # Use nvim --headless to query old files
-oldfiles=$(nvim --headless -c "lua local oldfiles = vim.v.oldfiles; for _, file in ipairs(oldfiles) do if vim.fn.filereadable(file) == 1 then print(file) end end" -c "quit" 2>/dev/null)
+oldfiles=$(nvim --headless -u NONE -c 'lua for _, file in ipairs(vim.v.oldfiles) do if vim.fn.filereadable(file) == 1 then io.stdout:write(file, "\n") end end' -c 'set shada=' -c 'quit' 2>/dev/null)
 
 # If no old files found, exit
 if [[ -z "$oldfiles" ]]; then
