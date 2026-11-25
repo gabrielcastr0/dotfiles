@@ -1,8 +1,11 @@
-# Dotfiles
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/header/grid.svg?title=Dotfiles&amp;align=left&amp;theme=violet&amp;logo=archlinux&amp;font=geist-mono&amp;width=896&amp;height=128&amp;mode=dark">
+    <img alt="Dotfiles" src="https://shieldcn.dev/header/grid.svg?title=Dotfiles&amp;align=left&amp;theme=violet&amp;logo=archlinux&amp;font=geist-mono&amp;width=896&amp;height=128&amp;mode=light">
+  </picture>
+</h1>
 
-Personal Linux development environment for Omarchy on Arch Linux, managed with GNU Stow.
-
-<p align="center">
+<p align="left">
   <a href="https://omarchy.org/"><picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Platform-Omarchy-555555.svg?logo=archlinux&amp;variant=secondary&amp;mode=dark">
     <img alt="Platform: Omarchy" src="https://shieldcn.dev/badge/Platform-Omarchy-555555.svg?logo=archlinux&amp;variant=secondary&amp;mode=light">
@@ -16,6 +19,8 @@ Personal Linux development environment for Omarchy on Arch Linux, managed with G
     <img alt="License: GNU GPL v3" src="https://shieldcn.dev/github/gabrielcastr0/dotfiles/license.svg?variant=secondary&amp;mode=light">
   </picture></a>
 </p>
+
+Personal Linux development environment for Omarchy on Arch Linux, managed with GNU Stow.
 
 ## What's included
 
